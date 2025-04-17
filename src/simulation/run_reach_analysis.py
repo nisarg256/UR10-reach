@@ -350,15 +350,22 @@ def run_analysis(model_path, interactive=True, visualize=True, demo_boundary=Fal
                 mujoco.mj_forward(model, data)
                 visualized_pause(0.5)
             
-            # Run the demonstrations
-            if robot_type == "both":
-                print("\nDemonstrating flat robot boundary...")
-                demo_boundary_with_viz("flat")
-                print("\nDemonstrating perpendicular robot boundary...")
-                demo_boundary_with_viz("perp")
-            else:
-                print(f"\nDemonstrating {robot_type} robot boundary...")
-                demo_boundary_with_viz(robot_type)
+            # Wait for user input before starting demonstration
+            print("\nPress Enter to start the demonstration, or 'q' to skip: ", end='', flush=True)
+            user_input = input().strip().lower()
+            if user_input != 'q':
+                # Run the demonstrations
+                if robot_type == "both":
+                    print("\nDemonstrating flat robot boundary...")
+                    demo_boundary_with_viz("flat")
+                    print("\nPress Enter to continue with perpendicular robot, or 'q' to skip: ", end='', flush=True)
+                    user_input = input().strip().lower()
+                    if user_input != 'q':
+                        print("\nDemonstrating perpendicular robot boundary...")
+                        demo_boundary_with_viz("perp")
+                else:
+                    print(f"\nDemonstrating {robot_type} robot boundary...")
+                    demo_boundary_with_viz(robot_type)
         
         # Main interactive loop
         print("\nInteractive mode: Use mouse to navigate, ESC to exit")
